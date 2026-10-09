@@ -1,0 +1,15 @@
+{
+  "name": "junior-qa-testing-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "QA documentation and browser tests for VK Marusya",
+  "scripts": {
+    "test": "node --test --test-concurrency=1 tests/catalog.test.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
