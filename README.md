@@ -1,6 +1,6 @@
 # Junior QA Testing Portfolio — VK Marusya
 
-Учебное QA-портфолио на основе реального приложения [VK Marusya](https://github.com/Kolomiets94/VKMarusya). Это документация и тесты, а не заявление о коммерческом опыте или полном прохождении регресса.
+Учебное QA-портфолио на основе реального приложения [VK Marusya](https://github.com/Kolomiets94/VKMarusya). Дополнительные воспроизведённые ошибки опубликованного [аудиоплеера](https://github.com/Kolomiets94/audioplayer) включены в баг-репорты. Это документация и тесты, а не заявление о коммерческом опыте или полном прохождении регресса.
 
 ## Проверяемая версия
 
@@ -13,7 +13,12 @@ React SPA с HashRouter, Redux Toolkit и сохранением избранн�
 - [Тест-план](docs/test-plan.md)
 - [20 тест-кейсов](docs/test-cases.md)
 - [Чек-листы функциональности, адаптивности и доступности](docs/checklists.md)
-- [Воспроизведённая ошибка установки](bugs/BUG-001-lockfile.md)
+- [BUG-001: ошибка установки — исправлена](bugs/BUG-001-lockfile.md)
+- [BUG-002: путь GitHub Pages аудиоплеера — исправлен](bugs/BUG-002-audioplayer-pages-path.md)
+- [BUG-003: навигация аудиоплеера с клавиатуры — открыт](bugs/BUG-003-audioplayer-keyboard-navigation.md)
+- [BUG-004: несовпадение длительности трека — открыт](bugs/BUG-004-audioplayer-duration.md)
+- [Postman-коллекция TVmaze](postman/tvmaze-fallback.postman_collection.json)
+- [Фактическая API-проверка через Newman](reports/api-2026-10-10.md)
 - [Шаблон баг-репорта](bugs/TEMPLATE.md)
 - [Автоматизированные тесты](tests/catalog.test.cjs)
 - [Первоначальная проверка](reports/verification.md)
@@ -59,4 +64,14 @@ npm test
 Статусы подготовленных кейсов и фактических запусков указаны в отчёте. Баги интерфейса без воспроизведения не публикуются.
 
 ## Подтверждённые результаты
-10 Playwright-сценариев прошли на локальной production-сборке в Chromium 153; [окружение и ограничения](reports/retest-2026-10-09.md). Это не полный регресс: ручные кейсы остаются NOT RUN, реальный TVmaze и GitHub Pages не проверены.
+10 Playwright-сценариев прошли на локальной production-сборке в Chromium 153; [окружение и ограничения](reports/retest-2026-10-09.md). Реальный TVmaze проверен отдельно 10 октября через Newman: 3 GET-запроса, 4 проверки, 0 ошибок; [отчёт и ограничения](reports/api-2026-10-10.md). В опубликованном аудиоплеере воспроизведены BUG-003 и BUG-004 и подтверждено исправление BUG-002. Это не полный регресс: 20 ручных кейсов VK Marusya остаются NOT RUN, его GitHub Pages не проверен.
+
+## API в Postman / Newman
+
+Импортируйте `postman/tvmaze-fallback.postman_collection.json` в Postman или запустите:
+
+```sh
+npx --yes newman@6.2.1 run postman/tvmaze-fallback.postman_collection.json --timeout-request 15000
+```
+
+Коллекция проверяет доступную карточку, неизвестный ID и некорректный ID. Она выполняет только GET, не проверяет локальный каталог VK Marusya и не меняет пользовательские данные. Автоматический запуск и JSON-отчёт доступны в [GitHub Actions](https://github.com/Kolomiets94/junior-qa-testing-portfolio/actions/workflows/api-tests.yml). Фактический запуск выполнен через Newman, а не интерфейс Postman.
