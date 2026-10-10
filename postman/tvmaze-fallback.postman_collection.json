@@ -1,0 +1,70 @@
+{
+  "info": {
+    "name": "VK Marusya TVmaze fallback API",
+    "description": "Read-only checks for the external getShow(id) fallback. Local catalogue IDs 1000001–1000008 are served by src/api/shows.ts and are not sent to TVmaze. No authentication, mutations or personal data.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.tvmaze.com"
+    }
+  ],
+  "item": [
+    {
+      "name": "Existing external show",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/shows/1"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Show fields used by app\", () => { const d=pm.response.json(); pm.expect(d.id).to.eql(1); pm.expect(d.name).to.be.a(\"string\"); pm.expect(d.genres).to.be.an(\"array\"); pm.expect(d.rating).to.have.property(\"average\"); [\"premiered\",\"summary\",\"image\"].forEach(k=>pm.expect(d).to.have.property(k)); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Unknown external ID",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/shows/999999999"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Unknown ID returns 404\", () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Invalid external ID",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/shows/not-a-number"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Invalid ID returns 404\", () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
